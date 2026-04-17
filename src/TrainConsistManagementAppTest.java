@@ -1,56 +1,44 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
-public class TrainConsistManagementAppTest {
+class TrainConsistManagementAppTest {
 
     @Test
-    public void testBogieCreation() {
-        Bogie bogie = new Bogie("Test Bogie", 100);
-        assertEquals("Test Bogie", bogie.getName());
-        assertEquals(100, bogie.getCapacity());
+    void testCargo_SafeAssignment() {
+        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
+        cylindricalBogie.assignCargo("Petroleum");
+        assertEquals("Petroleum", cylindricalBogie.getCargo());
     }
 
     @Test
-    public void testBogieToString() {
-        Bogie bogie = new Bogie("Sleeper", 72);
-        assertEquals("Sleeper (72 seats)", bogie.toString());
+    void testCargo_UnsafeAssignmentHandled() {
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
+        assertNull(rectangularBogie.getCargo());
     }
 
     @Test
-    public void testComparatorSortingAscending() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("First Class", 48));
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
-
-        assertEquals(48, bogies.get(0).getCapacity());
-        assertEquals(56, bogies.get(1).getCapacity());
-        assertEquals(72, bogies.get(2).getCapacity());
+    void testCargo_CargoNotAssignedAfterFailure() {
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
+        assertNull(rectangularBogie.getCargo());
     }
 
     @Test
-    public void testComparatorSortingDescending() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("First Class", 48));
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
+    void testCargo_ProgramContinuesAfterException() {
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
 
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
+        GoodsBogie safeBogie = new GoodsBogie("Rectangular");
+        safeBogie.assignCargo("Coal");
 
-        assertEquals(72, bogies.get(0).getCapacity());
-        assertEquals(56, bogies.get(1).getCapacity());
-        assertEquals(48, bogies.get(2).getCapacity());
+        assertEquals("Coal", safeBogie.getCargo());
     }
 
     @Test
-    public void testEmptyListSorting() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
-        assertTrue(bogies.isEmpty());
+    void testCargo_FinallyBlockExecution() {
+        GoodsBogie bogie = new GoodsBogie("Rectangular");
+        bogie.assignCargo("Petroleum");
+        assertNull(bogie.getCargo());
     }
 }

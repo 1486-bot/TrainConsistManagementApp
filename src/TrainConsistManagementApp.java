@@ -1,88 +1,48 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
-class Bogie {
-    private String name;
-    private int capacity;
-
-    public Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public String toString() {
-        return name + " (" + capacity + " seats)";
+class CargoSafetyException extends RuntimeException {
+    public CargoSafetyException(String message) {
+        super(message);
     }
 }
+class GoodsBogie {
+    private String shape;
+    private String cargo;
 
+    public GoodsBogie(String shape) {
+        this.shape = shape;
+    }
+
+    public void assignCargo(String cargo) {
+        try {
+            if (shape.equalsIgnoreCase("Rectangular") && cargo.equalsIgnoreCase("Petroleum")) {
+                throw new CargoSafetyException("Unsafe Assignment: Petroleum cannot be assigned to Rectangular bogie!");
+            }
+            this.cargo = cargo;
+            System.out.println("Cargo " + cargo + " successfully assigned to " + shape + " bogie.");
+        } catch (CargoSafetyException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println("Cargo assignment validation completed for " + shape + " bogie.");
+        }
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+}
 public class TrainConsistManagementApp {
-
     public static void main(String[] args) {
-        // Print welcome message
-        System.out.println("=== Train Consist Management App ===");
-        System.out.println();
+        GoodsBogie cylindricalBogie = new GoodsBogie("Cylindrical");
+        cylindricalBogie.assignCargo("Petroleum");
 
-        // UC14: Sort Bogies Using Comparator
-        System.out.println("--- UC14: Sort Bogies Using Comparator ---");
-        System.out.println();
+        GoodsBogie rectangularBogie = new GoodsBogie("Rectangular");
+        rectangularBogie.assignCargo("Petroleum");
 
-        // Create a List<Bogie> to store bogies
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 56));
-        bogies.add(new Bogie("First Class", 48));
+        GoodsBogie rectangularBogieSafe = new GoodsBogie("Rectangular");
+        rectangularBogieSafe.assignCargo("Coal");
 
-        // Display unsorted bogies
-        System.out.println("Unsorted bogies:");
-        for (int i = 0; i < bogies.size(); i++) {
-            System.out.println((i + 1) + ". " + bogies.get(i));
-        }
-        System.out.println();
-
-        // Sort bogies by capacity in ascending order using Comparator
-        System.out.println("Sorting bogies by capacity (ascending)...");
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
-        System.out.println("Sorting completed.");
-        System.out.println();
-
-        // Display sorted bogies
-        System.out.println("Sorted bogies (by capacity ascending):");
-        for (int i = 0; i < bogies.size(); i++) {
-            System.out.println((i + 1) + ". " + bogies.get(i));
-        }
-        System.out.println();
-
-        // Sort by capacity descending
-        System.out.println("Sorting bogies by capacity (descending)...");
-        bogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
-        System.out.println("Sorting completed.");
-        System.out.println();
-
-        // Display sorted bogies descending
-        System.out.println("Sorted bogies (by capacity descending):");
-        for (int i = 0; i < bogies.size(); i++) {
-            System.out.println((i + 1) + ". " + bogies.get(i));
-        }
-        System.out.println();
-
-        System.out.println("Key Benefits of Comparator:");
-        System.out.println("✓ Flexible sorting without modifying the class");
-        System.out.println("✓ Chain comparators for multiple criteria");
-        System.out.println("✓ Reusable and composable");
-        System.out.println("✓ Improves code readability and maintainability");
-        System.out.println("✓ Supports both ascending and descending order");
-        System.out.println();
-
-        System.out.println("Program continues...");
+        System.out.println("Final Cargo in Cylindrical Bogie: " + cylindricalBogie.getCargo());
+        System.out.println("Final Cargo in Rectangular Bogie (unsafe attempt): " + rectangularBogie.getCargo());
+        System.out.println("Final Cargo in Rectangular Bogie (safe attempt): " + rectangularBogieSafe.getCargo());
     }
 }

@@ -1,101 +1,60 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Test class for UC9: Group Bogies by Type (Collectors.groupingBy)
+ * JUnit tests for TrainConsistManagementApp
+ * UC11: Sort Bogies Using Comparator
  */
 public class TrainConsistManagementAppTest {
 
-    // Helper method to create test bogies with duplicates
-    private List<Bogie> createTestBogies() {
+    @Test
+    public void testBogieCreation() {
+        Bogie bogie = new Bogie("Test Bogie", 100);
+        assertEquals("Test Bogie", bogie.getName());
+        assertEquals(100, bogie.getCapacity());
+    }
+
+    @Test
+    public void testBogieToString() {
+        Bogie bogie = new Bogie("Sleeper", 72);
+        assertEquals("Sleeper (72 seats)", bogie.toString());
+    }
+
+    @Test
+    public void testComparatorSortingAscending() {
         List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 96));
         bogies.add(new Bogie("First Class", 48));
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 96));
-        return bogies;
-    }
 
-    // Helper method to group bogies
-    private Map<String, List<Bogie>> groupBogiesByType(List<Bogie> bogies) {
-        return bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
-    }
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
 
-    @Test
-    public void testGrouping_BogiesGroupedByType() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(3, grouped.size());
-        assertTrue(grouped.containsKey("Sleeper"));
-        assertTrue(grouped.containsKey("AC Chair"));
-        assertTrue(grouped.containsKey("First Class"));
+        assertEquals(48, bogies.get(0).getCapacity());
+        assertEquals(72, bogies.get(1).getCapacity());
+        assertEquals(96, bogies.get(2).getCapacity());
     }
 
     @Test
-    public void testGrouping_MultipleBogiesInSameGroup() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(2, grouped.get("Sleeper").size());
-        assertEquals(2, grouped.get("AC Chair").size());
-        assertEquals(1, grouped.get("First Class").size());
-    }
-
-    @Test
-    public void testGrouping_DifferentBogieTypes() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertNotEquals(grouped.get("Sleeper"), grouped.get("AC Chair"));
-    }
-
-    @Test
-    public void testGrouping_EmptyBogieList() {
+    public void testComparatorSortingDescending() {
         List<Bogie> bogies = new ArrayList<>();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertTrue(grouped.isEmpty());
+        bogies.add(new Bogie("First Class", 48));
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 96));
+
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
+
+        assertEquals(96, bogies.get(0).getCapacity());
+        assertEquals(72, bogies.get(1).getCapacity());
+        assertEquals(48, bogies.get(2).getCapacity());
     }
 
     @Test
-    public void testGrouping_SingleBogieCategory() {
+    public void testEmptyListSorting() {
         List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("Sleeper", 72));
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(1, grouped.size());
-        assertEquals(2, grouped.get("Sleeper").size());
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+        assertTrue(bogies.isEmpty());
     }
-
-    @Test
-    public void testGrouping_MapContainsCorrectKeys() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertTrue(grouped.keySet().contains("Sleeper"));
-        assertTrue(grouped.keySet().contains("AC Chair"));
-        assertTrue(grouped.keySet().contains("First Class"));
-    }
-
-    @Test
-    public void testGrouping_GroupSizeValidation() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(2, grouped.get("Sleeper").size());
-        assertEquals(2, grouped.get("AC Chair").size());
-        assertEquals(1, grouped.get("First Class").size());
-    }
-
-    @Test
-    public void testGrouping_OriginalListUnchanged() {
-        List<Bogie> bogies = createTestBogies();
-        List<Bogie> original = new ArrayList<>(bogies);
-        groupBogiesByType(bogies);
-        assertEquals(original, bogies);
-    }
-                .collect(Collectors.groupingBy(b -> "Group"));
-    assertTrue(grouped.isEmpty());
-}
 }

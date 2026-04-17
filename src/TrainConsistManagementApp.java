@@ -1,11 +1,10 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Train Consist Management App
- * UC9: Group Bogies by Type (Collectors.groupingBy)
+ * UC11: Sort Bogies Using Comparator
  */
 
 /**
@@ -41,50 +40,56 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC9: Group Bogies by Type (Collectors.groupingBy)
-        System.out.println("--- UC9: Group Bogies by Type (Collectors.groupingBy) ---");
+        // UC11: Sort Bogies Using Comparator
+        System.out.println("--- UC11: Sort Bogies Using Comparator ---");
         System.out.println();
 
-        // Create a List<Bogie> with multiple bogies, including duplicates
+        // Create a List<Bogie> to store bogies
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 96));
         bogies.add(new Bogie("First Class", 48));
-        bogies.add(new Bogie("Sleeper", 72));  // Duplicate
-        bogies.add(new Bogie("AC Chair", 96)); // Duplicate
+        bogies.add(new Bogie("General", 120));
 
-        // Display all bogies
-        System.out.println("All bogies in the train:");
+        // Display unsorted bogies
+        System.out.println("Unsorted bogies:");
         for (int i = 0; i < bogies.size(); i++) {
             System.out.println((i + 1) + ". " + bogies.get(i));
         }
         System.out.println();
 
-        // Group bogies by type using Collectors.groupingBy
-        System.out.println("Grouping bogies by type...");
-        Map<String, List<Bogie>> groupedBogies = bogies.stream()
-                .collect(Collectors.groupingBy(Bogie::getName));
-        System.out.println("Grouping completed.");
+        // Sort bogies by capacity in ascending order using Comparator
+        System.out.println("Sorting bogies by capacity (ascending)...");
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity));
+        System.out.println("Sorting completed.");
         System.out.println();
 
-        // Display grouped bogies
-        System.out.println("Grouped bogies by type:");
-        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
-            String type = entry.getKey();
-            List<Bogie> group = entry.getValue();
-            System.out.println("Type: " + type + " (" + group.size() + " bogies)");
-            for (int i = 0; i < group.size(); i++) {
-                System.out.println("  " + (i + 1) + ". " + group.get(i));
-            }
-            System.out.println();
+        // Display sorted bogies
+        System.out.println("Sorted bogies (by capacity ascending):");
+        for (int i = 0; i < bogies.size(); i++) {
+            System.out.println((i + 1) + ". " + bogies.get(i));
         }
+        System.out.println();
 
-        System.out.println("Key Benefits of Collectors.groupingBy:");
-        System.out.println("✓ Transforms flat data into categorized structures");
-        System.out.println("✓ Enables structured reporting and analysis");
-        System.out.println("✓ Introduces advanced stream collectors");
-        System.out.println("✓ Improves data organization for dashboards");
-        System.out.println("✓ Builds foundation for analytics operations");
+        // Sort by capacity descending
+        System.out.println("Sorting bogies by capacity (descending)...");
+        bogies.sort(Comparator.comparingInt(Bogie::getCapacity).reversed());
+        System.out.println("Sorting completed.");
+        System.out.println();
+
+        // Display sorted bogies descending
+        System.out.println("Sorted bogies (by capacity descending):");
+        for (int i = 0; i < bogies.size(); i++) {
+            System.out.println((i + 1) + ". " + bogies.get(i));
+        }
+        System.out.println();
+
+        System.out.println("Key Benefits of Comparator:");
+        System.out.println("✓ Flexible sorting without modifying the class");
+        System.out.println("✓ Chain comparators for multiple criteria");
+        System.out.println("✓ Reusable and composable");
+        System.out.println("✓ Improves code readability and maintainability");
+        System.out.println("✓ Supports both ascending and descending order");
         System.out.println();
 
         System.out.println("Program continues...");

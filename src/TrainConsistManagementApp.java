@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 class Bogie {
     private String name;
     private int capacity;
@@ -33,16 +32,15 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC13: Sort Bogies Using Comparator
-        System.out.println("--- UC13: Sort Bogies Using Comparator ---");
+        // UC14: Sort Bogies Using Comparator
+        System.out.println("--- UC14: Sort Bogies Using Comparator ---");
         System.out.println();
 
         // Create a List<Bogie> to store bogies
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 96));
+        bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 48));
-        bogies.add(new Bogie("General", 120));
 
         // Display unsorted bogies
         System.out.println("Unsorted bogies:");

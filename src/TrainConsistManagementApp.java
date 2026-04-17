@@ -2,14 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Train Consist Management App
- * UC12: Sort Bogies Using Comparator
- */
 
-/**
- * Bogie class to represent a train bogie with name and capacity.
- */
 class Bogie {
     private String name;
     private int capacity;
@@ -40,8 +33,8 @@ public class TrainConsistManagementApp {
         System.out.println("=== Train Consist Management App ===");
         System.out.println();
 
-        // UC12: Sort Bogies Using Comparator
-        System.out.println("--- UC12: Sort Bogies Using Comparator ---");
+        // UC13: Sort Bogies Using Comparator
+        System.out.println("--- UC13: Sort Bogies Using Comparator ---");
         System.out.println();
 
         // Create a List<Bogie> to store bogies

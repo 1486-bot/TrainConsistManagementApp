@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Test class for UC9: Group Bogies by Type (Collectors.groupingBy)
+ */
 public class TrainConsistManagementAppTest {
 
     // Helper method to create test bogies with duplicates

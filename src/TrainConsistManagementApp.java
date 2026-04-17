@@ -1,101 +1,92 @@
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Test class for UC9: Group Bogies by Type (Collectors.groupingBy)
+ * Train Consist Management App
+ * UC9: Group Bogies by Type (Collectors.groupingBy)
  */
-public class TrainConsistManagementAppTest {
 
-    // Helper method to create test bogies with duplicates
-    private List<Bogie> createTestBogies() {
+/**
+ * Bogie class to represent a train bogie with name and capacity.
+ */
+class Bogie {
+    private String name;
+    private int capacity;
+
+    public Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + capacity + " seats)";
+    }
+}
+
+public class TrainConsistManagementApp {
+
+    public static void main(String[] args) {
+        // Print welcome message
+        System.out.println("=== Train Consist Management App ===");
+        System.out.println();
+
+        // UC9: Group Bogies by Type (Collectors.groupingBy)
+        System.out.println("--- UC9: Group Bogies by Type (Collectors.groupingBy) ---");
+        System.out.println();
+
+        // Create a List<Bogie> with multiple bogies, including duplicates
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 96));
         bogies.add(new Bogie("First Class", 48));
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 96));
-        return bogies;
-    }
+        bogies.add(new Bogie("Sleeper", 72));  // Duplicate
+        bogies.add(new Bogie("AC Chair", 96)); // Duplicate
 
-    // Helper method to group bogies
-    private Map<String, List<Bogie>> groupBogiesByType(List<Bogie> bogies) {
-        return bogies.stream()
+        // Display all bogies
+        System.out.println("All bogies in the train:");
+        for (int i = 0; i < bogies.size(); i++) {
+            System.out.println((i + 1) + ". " + bogies.get(i));
+        }
+        System.out.println();
+
+        // Group bogies by type using Collectors.groupingBy
+        System.out.println("Grouping bogies by type...");
+        Map<String, List<Bogie>> groupedBogies = bogies.stream()
                 .collect(Collectors.groupingBy(Bogie::getName));
-    }
+        System.out.println("Grouping completed.");
+        System.out.println();
 
-    @Test
-    public void testGrouping_BogiesGroupedByType() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(3, grouped.size());
-        assertTrue(grouped.containsKey("Sleeper"));
-        assertTrue(grouped.containsKey("AC Chair"));
-        assertTrue(grouped.containsKey("First Class"));
-    }
+        // Display grouped bogies
+        System.out.println("Grouped bogies by type:");
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            String type = entry.getKey();
+            List<Bogie> group = entry.getValue();
+            System.out.println("Type: " + type + " (" + group.size() + " bogies)");
+            for (int i = 0; i < group.size(); i++) {
+                System.out.println("  " + (i + 1) + ". " + group.get(i));
+            }
+            System.out.println();
+        }
 
-    @Test
-    public void testGrouping_MultipleBogiesInSameGroup() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(2, grouped.get("Sleeper").size());
-        assertEquals(2, grouped.get("AC Chair").size());
-        assertEquals(1, grouped.get("First Class").size());
-    }
+        System.out.println("Key Benefits of Collectors.groupingBy:");
+        System.out.println("✓ Transforms flat data into categorized structures");
+        System.out.println("✓ Enables structured reporting and analysis");
+        System.out.println("✓ Introduces advanced stream collectors");
+        System.out.println("✓ Improves data organization for dashboards");
+        System.out.println("✓ Builds foundation for analytics operations");
+        System.out.println();
 
-    @Test
-    public void testGrouping_DifferentBogieTypes() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertNotEquals(grouped.get("Sleeper"), grouped.get("AC Chair"));
+        System.out.println("Program continues...");
     }
-
-    @Test
-    public void testGrouping_EmptyBogieList() {
-        List<Bogie> bogies = new ArrayList<>();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertTrue(grouped.isEmpty());
-    }
-
-    @Test
-    public void testGrouping_SingleBogieCategory() {
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("Sleeper", 72));
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(1, grouped.size());
-        assertEquals(2, grouped.get("Sleeper").size());
-    }
-
-    @Test
-    public void testGrouping_MapContainsCorrectKeys() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertTrue(grouped.keySet().contains("Sleeper"));
-        assertTrue(grouped.keySet().contains("AC Chair"));
-        assertTrue(grouped.keySet().contains("First Class"));
-    }
-
-    @Test
-    public void testGrouping_GroupSizeValidation() {
-        List<Bogie> bogies = createTestBogies();
-        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
-        assertEquals(2, grouped.get("Sleeper").size());
-        assertEquals(2, grouped.get("AC Chair").size());
-        assertEquals(1, grouped.get("First Class").size());
-    }
-
-    @Test
-    public void testGrouping_OriginalListUnchanged() {
-        List<Bogie> bogies = createTestBogies();
-        List<Bogie> original = new ArrayList<>(bogies);
-        groupBogiesByType(bogies);
-        assertEquals(original, bogies);
-    }
-                .collect(Collectors.groupingBy(b -> "Group"));
-    assertTrue(grouped.isEmpty());
-}
 }
